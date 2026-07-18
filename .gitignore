@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.env
+logs/*
+!logs/.gitkeep
+output/excel_table/*
+!output/excel_table/.gitkeep
+output/wordcloud_img/*
+!output/wordcloud_img/.gitkeep
+output/cover_export/*
+!output/cover_export/.gitkeep
+assets/cache_cover/*
+!assets/cache_cover/.gitkeep
