@@ -1,0 +1,48 @@
+# ============================================================
+# Excel 表格模板配置
+# ============================================================
+
+# ---------- 表1：视频基础信息总表 ----------
+video_meta_info:
+  sheet_name: "视频基础信息"
+  columns:
+    - {field: "video_id",         header: "视频ID",       width: 20,  type: "string"}
+    - {field: "video_url",        header: "视频链接",      width: 50,  type: "string"}
+    - {field: "title_text",       header: "视频标题",      width: 60,  type: "string"}
+    - {field: "publish_time",     header: "发布时间",      width: 22,  type: "datetime"}
+    - {field: "author_name",      header: "作者昵称",      width: 20,  type: "string"}
+    - {field: "author_uid",       header: "作者ID",        width: 25,  type: "string"}
+    - {field: "play_count",       header: "播放量",        width: 14,  type: "int"}
+    - {field: "like_count",       header: "点赞数",        width: 14,  type: "int"}
+    - {field: "collect_count",    header: "收藏数",        width: 14,  type: "int"}
+    - {field: "share_count",      header: "转发数",        width: 14,  type: "int"}
+    - {field: "comment_total",    header: "总评论数",      width: 14,  type: "int"}
+    - {field: "cover_url",        header: "封面图链接",    width: 50,  type: "string"}
+    - {field: "cover_local_path", header: "本地封面路径",  width: 40,  type: "string"}
+    - {field: "parse_time",       header: "解析时间",      width: 22,  type: "datetime"}
+
+# ---------- 表2：全量评论明细表 ----------
+comment_detail:
+  sheet_name: "评论明细"
+  columns:
+    - {field: "video_id",          header: "关联视频ID",    width: 20,  type: "string"}
+    - {field: "comment_id",        header: "评论ID",        width: 22,  type: "string"}
+    - {field: "parent_comment_id", header: "父评论ID",      width: 22,  type: "string"}
+    - {field: "comment_user",      header: "评论用户",      width: 20,  type: "string"}
+    - {field: "comment_content",   header: "评论内容",      width: 60,  type: "string"}
+    - {field: "comment_like",      header: "评论点赞数",    width: 14,  type: "int"}
+    - {field: "is_question",       header: "是否提问",      width: 10,  type: "int"}
+    - {field: "publish_time",      header: "评论时间",      width: 22,  type: "datetime"}
+
+# ---------- 表3：评论热点问题汇总表 ----------
+comment_hot_topic:
+  sheet_name: "评论热点问题"
+  columns:
+    - {field: "video_id",           header: "关联视频ID",    width: 20,  type: "string"}
+    - {field: "topic_id",           header: "话题编号",      width: 12,  type: "int"}
+    - {field: "topic_keyword",      header: "核心关键词",    width: 25,  type: "string"}
+    - {field: "sample_question",    header: "代表性提问",    width: 60,  type: "string"}
+    - {field: "total_comment_num",  header: "评论条数",      width: 12,  type: "int"}
+    - {field: "avg_like",           header: "平均点赞",      width: 12,  type: "float"}
+    - {field: "topic_weight",       header: "热度权重",      width: 12,  type: "float"}
+    - {field: "related_comment_ids",header: "关联评论ID",    width: 50,  type: "string"}
