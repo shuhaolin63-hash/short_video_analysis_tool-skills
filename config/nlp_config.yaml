@@ -1,0 +1,77 @@
+# ============================================================
+# NLP 评论分析配置
+# NLP Comment Analysis Configuration
+# ============================================================
+
+word_segment:
+  # 停用词表路径
+  stopwords_path: "assets/nlp_dict/stopwords.txt"
+  # 用户自定义词典路径
+  user_dict_path: "assets/nlp_dict/user_dict.txt"
+  # 是否保留数字
+  keep_digits: false
+  # 最小词长度（过滤掉过短的词）
+  min_word_length: 2
+  # 是否使用精确模式分词（True=精确模式, False=全模式）
+  use_precise_mode: true
+
+topic_cluster:
+  # 聚类方法: "lda"（LDA模型） 或 "bertopic"（BERTopic模型）
+  method: "lda"
+  # LDA 话题数量
+  num_topics: 5
+  # LDA 每个话题最大词数
+  num_words_per_topic: 10
+  # LDA 迭代次数
+  lda_passes: 10
+  # 随机种子，保证结果可复现
+  random_state: 42
+  # TF-IDF 特征词最大数量
+  max_tfidf_features: 1000
+  # 最小词频（低于此值的词将被忽略）
+  min_df: 2
+  # 最大词频比例（高于此比例的通用词将被忽略）
+  max_df: 0.85
+
+question_extract:
+  # 疑问句识别关键词
+  question_keywords:
+    - "怎么"
+    - "如何"
+    - "为什么"
+    - "多少钱"
+    - "哪里"
+    - "什么时候"
+    - "有没有"
+    - "是不是"
+    - "能否"
+    - "什么"
+    - "是不是"
+    - "能不能"
+    - "会不会"
+    - "要不要"
+    - "有没有"
+    - "多少"
+    - "哪个"
+    - "谁"
+    - "吗"
+    - "呢"
+  # 最小疑问句长度（字符数）
+  min_question_length: 4
+  # 最大疑问句长度（字符数），太长的一般不是有效的提问
+  max_question_length: 200
+
+# 词云图配置
+wordcloud:
+  # 词云背景颜色
+  background_color: "white"
+  # 词云宽度
+  width: 800
+  # 词云高度
+  height: 600
+  # 最大词数
+  max_words: 200
+  # 中文字体路径（Windows系统默认）
+  font_path: "C:/Windows/Fonts/simhei.ttf"
+  # 是否生成词云图
+  generate_wordcloud: true
