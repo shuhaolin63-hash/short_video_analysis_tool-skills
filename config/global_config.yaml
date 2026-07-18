@@ -1,0 +1,70 @@
+# ============================================================
+# 短视频解析工具 - 全局配置
+# Short Video Analysis Tool - Global Configuration
+# ============================================================
+
+crawler:
+  # 请求间隔（秒），避免触发反爬
+  request_delay: 1.5
+  # 单次请求最大重试次数
+  max_retries: 3
+  # HTTP 超时时间（秒）
+  timeout: 10
+  # 代理配置（留空表示直连）
+  proxies:
+    http: ""
+    https: ""
+
+  # 评论抓取分页参数
+  comment:
+    # 每页评论数（抖音单次最多20条）
+    page_size: 20
+    # 最大抓取页数（0表示不限制）
+    max_pages: 0
+    # 是否抓取二级回复评论
+    fetch_replies: true
+
+  cover:
+    # 封面下载并发数
+    download_concurrency: 5
+    # 下载超时（秒）
+    download_timeout: 30
+
+output:
+  # Excel 表格输出目录
+  excel_dir: "output/excel_table/"
+  # 封面导出目录
+  cover_export_dir: "output/cover_export/"
+  # 词云图输出目录
+  wordcloud_dir: "output/wordcloud_img/"
+  # 缓存封面目录
+  cache_cover_dir: "assets/cache_cover/"
+
+  # 文件命名格式（可用变量: {video_id}, {platform}, {timestamp}）
+  excel_filename_video_meta: "video_meta_info.xlsx"
+  excel_filename_comment_detail: "comment_detail.xlsx"
+  excel_filename_hot_topic: "comment_hot_topic.xlsx"
+  cover_filename_format: "{video_id}_cover.jpg"
+  wordcloud_filename: "comment_wordcloud_{video_id}.png"
+
+table_format:
+  # 表头字体加粗
+  header_font_bold: true
+  # 自动调整列宽
+  auto_column_width: true
+  # 冻结首行
+  freeze_first_row: true
+  # 添加自动筛选
+  add_auto_filter: true
+  # 列宽最大限制（字符数）
+  max_column_width: 60
+
+logging:
+  # 日志级别: DEBUG, INFO, WARNING, ERROR
+  level: "INFO"
+  # 日志文件路径
+  log_dir: "logs/"
+  # 日志文件保留天数
+  log_retention_days: 7
+  # 是否同时输出到控制台
+  console_output: true
