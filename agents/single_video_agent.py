@@ -80,86 +80,64 @@ class SingleVideoAgent:
         # ---- 按需导入各 skill 模块（函数/类引用） ----
         self._import_skills()
 
+    @staticmethod
+    def _safe_import(module_path: str, import_names: list[str]) -> dict | None:
+        """安全导入模块，返回 {别名: 对象} 或 None（失败时）。
+
+        将原先每个 skill 重复的 try/except 模式统一为一行调用，
+        减少样板代码，提升可维护性。
+        """
+        import importlib
+        try:
+            mod = importlib.import_module(module_path)
+            # import_names 支持 "name" 或 "name as alias" 语法
+            result = {}
+            for spec in import_names:
+                if " as " in spec:
+                    real_name, alias = spec.split(" as ", 1)
+                    result[alias.strip()] = getattr(mod, real_name.strip())
+                else:
+                    result[spec.strip()] = getattr(mod, spec.strip())
+            return result
+        except (ImportError, AttributeError) as e:
+            return None
+
     def _import_skills(self):
         """导入所有 skill 模块，根据各模块实际导出的 API 进行适配"""
         self.skills = {}
 
-        # ---- 1. 爬虫抓取 skill ----
-        # 实际导出的 API: SpiderFetchAPI (class) + fetch_video_meta (async) + fetch_comments (async)
-        try:
-            from skills.spider_fetch_skill import (
-                SpiderFetchAPI,
-                fetch_video_meta as _fetch_video_meta,
-                fetch_comments as _fetch_comments,
-            )
-            self.skills["spider_fetch_api_cls"] = SpiderFetchAPI
-            self.skills["spider_fetch_meta_fn"] = _fetch_video_meta
-            self.skills["spider_fetch_comments_fn"] = _fetch_comments
-            self.logger.info("[Skill] spider_fetch_skill 加载成功")
-        except ImportError as e:
-            self.skills["spider_fetch_api_cls"] = None
-            self.logger.warning(f"[Skill] spider_fetch_skill 加载失败: {e}")
+        # ---- Skill 注册表：模块路径 -> (导入列表, skills 键映射) ----
+        # 使用 _safe_import 消除重复的 try/except 样板代码
+        skill_registry = [
+            ("skills.spider_fetch_skill",
+             ["SpiderFetchAPI", "fetch_video_meta as spider_fetch_meta_fn",
+              "fetch_comments as spider_fetch_comments_fn"]),
+            ("skills.cover_download_skill",
+             ["download_cover as cover_download_fn"]),
+            ("skills.data_clean_skill",
+             ["clean_video_meta as data_clean_meta_fn",
+              "clean_comments as data_clean_comments_fn"]),
+            ("skills.nlp_comment_analysis_skill",
+             ["segment_comments as nlp_segment_fn",
+              "cluster_topics as nlp_cluster_fn",
+              "extract_questions as nlp_extract_fn"]),
+            ("skills.table_export_skill",
+             ["export_video_meta_table as table_export_meta_fn",
+              "export_comment_detail_table as table_export_comment_fn",
+              "export_hot_topic_table as table_export_topic_fn"]),
+        ]
 
-        # ---- 2. 封面下载 skill ----
-        # 实际导出的 API: download_cover (async function)
-        try:
-            from skills.cover_download_skill import download_cover as _download_cover
-            self.skills["cover_download_fn"] = _download_cover
-            self.logger.info("[Skill] cover_download_skill 加载成功")
-        except ImportError as e:
-            self.skills["cover_download_fn"] = None
-            self.logger.warning(f"[Skill] cover_download_skill 加载失败: {e}")
-
-        # ---- 3. 数据清洗 skill ----
-        # 实际导出的 API: clean_video_meta(sync), clean_comments(sync)
-        try:
-            from skills.data_clean_skill import (
-                clean_video_meta as _clean_meta,
-                clean_comments as _clean_comments,
-            )
-            self.skills["data_clean_meta_fn"] = _clean_meta
-            self.skills["data_clean_comments_fn"] = _clean_comments
-            self.logger.info("[Skill] data_clean_skill 加载成功")
-        except ImportError as e:
-            self.skills["data_clean_meta_fn"] = None
-            self.skills["data_clean_comments_fn"] = None
-            self.logger.warning(f"[Skill] data_clean_skill 加载失败: {e}")
-
-        # ---- 4. NLP 评论分析 skill ----
-        # 实际导出的 API: segment_comments(sync), cluster_topics(sync), extract_questions(sync)
-        try:
-            from skills.nlp_comment_analysis_skill import (
-                segment_comments as _segment,
-                cluster_topics as _cluster,
-                extract_questions as _extract,
-            )
-            self.skills["nlp_segment_fn"] = _segment
-            self.skills["nlp_cluster_fn"] = _cluster
-            self.skills["nlp_extract_fn"] = _extract
-            self.logger.info("[Skill] nlp_comment_analysis_skill 加载成功")
-        except ImportError as e:
-            self.skills["nlp_segment_fn"] = None
-            self.skills["nlp_cluster_fn"] = None
-            self.skills["nlp_extract_fn"] = None
-            self.logger.warning(f"[Skill] nlp_comment_analysis_skill 加载失败: {e}")
-
-        # ---- 5. Excel 导出 skill ----
-        # 实际导出的 API: export_video_meta_table, export_comment_detail_table, export_hot_topic_table
-        try:
-            from skills.table_export_skill import (
-                export_video_meta_table as _export_meta,
-                export_comment_detail_table as _export_comment,
-                export_hot_topic_table as _export_topic,
-            )
-            self.skills["table_export_meta_fn"] = _export_meta
-            self.skills["table_export_comment_fn"] = _export_comment
-            self.skills["table_export_topic_fn"] = _export_topic
-            self.logger.info("[Skill] table_export_skill 加载成功")
-        except ImportError as e:
-            self.skills["table_export_meta_fn"] = None
-            self.skills["table_export_comment_fn"] = None
-            self.skills["table_export_topic_fn"] = None
-            self.logger.warning(f"[Skill] table_export_skill 加载失败: {e}")
+        for module_path, import_names in skill_registry:
+            loaded = self._safe_import(module_path, import_names)
+            if loaded:
+                self.skills.update(loaded)
+                self.logger.info(f"[Skill] {module_path.split('.')[-1]} 加载成功")
+            else:
+                # 导入失败时将对应键设为 None，保持下游兼容
+                for spec in import_names:
+                    key = spec.split(" as ", 1)[-1].strip() if " as " in spec else spec.strip()
+                    self.skills[key] = None
+                self.logger.warning(f"[Skill] {module_path.split('.')[-1]} 加载失败")
 
     # ---------------------------------------------------------------
     #  主入口
