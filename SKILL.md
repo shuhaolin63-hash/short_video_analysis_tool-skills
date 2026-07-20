@@ -10,7 +10,7 @@ description: "抖音/TikTok/B站短视频全链路解析工具：爬取元数据
 
 📡 爬取元数据+评论 · 🧹 数据清洗 · 🧠 NLP 热点挖掘 · 📊 三表 Excel 归一输出 · 🖼️ 封面自动归档
 
-![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue) ![License](https://img.shields.io/badge/license-Apache%202.0-green) ![Douyin](https://img.shields.io/badge/platform-Douyin-red) ![TikTok](https://img.shields.io/badge/platform-TikTok-black) ![Bilibili](https://img.shields.io/badge/platform-Bilibili-00A1D6)
+![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Douyin](https://img.shields.io/badge/platform-Douyin-red) ![TikTok](https://img.shields.io/badge/platform-TikTok-black) ![Bilibili](https://img.shields.io/badge/platform-Bilibili-00A1D6)
 
 🆕 基于 [Douyin_TikTok_Download_API](https://github.com/Evil0ctal/Douyin_TikTok_Download_API) V4.1.2 封装 · 支持抖音 / TikTok / Bilibili 三平台 · 单条 & 批量
 
@@ -201,7 +201,7 @@ short_video_analysis_tool/
 │
 ├── .gitignore
 ├── requirements.txt
-├── SKILL.md                          # ← 就是这个文件
+├── SKILL.md
 └── README.md
 ```
 
@@ -571,20 +571,28 @@ class AnalysisData:
 
 ## 📄 License
 
-Apache 2.0
+MIT
 
 ```
-Copyright 2025 short-video-analysis-tool
+MIT License
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+Copyright (c) 2026 夜秋风6
 
-    http://www.apache.org/licenses/LICENSE-2.0
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
